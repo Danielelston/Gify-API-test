@@ -1,7 +1,7 @@
 $(document).ready(function () {
     var giphyApp = {
 
-        btnArry: ["skunk", "rabbit", "cat", "dog", "hamster", "goldfish", "bird", "ferret", "hedgehog", "frog"],
+        btnArry: ["happy", "sad", "surprised", "angry", "laughing", "thats bait", "eye roll", "thumbs up", "yes", "lol"],
 
         giphySearchBtn: $("#giphySearchBtn").on("click", function (event) {
 
@@ -23,8 +23,10 @@ $(document).ready(function () {
                     form.reset();
                 } else {
                     // TODO: add alert "duplicate search"
+                    console.log("duplicate input")
                 };
             } else {
+                console.log("no input")
                 // TODO: ADD alert "PLEASE ADD INPUT"
 
             };
@@ -33,12 +35,14 @@ $(document).ready(function () {
         renderBtns: function () {
             $("#btnContainer").empty();
             for (var i = 0; i < this.btnArry.length; i++) {
-                var btn = $("<button>");
+                var btn = $("<li>");
                 btn.addClass("btn btn-info searchBtn");
                 btn.attr("data-gifSearch", this.btnArry[i]);
                 btn.text(this.btnArry[i]);
                 $("#btnContainer").append(btn);
             };
+            $(".searchBtn").click(giphyApp.displayGifs);
+
         },
 
         displayGifs: function () {
@@ -55,31 +59,33 @@ $(document).ready(function () {
                 console.log(response);
 
                 var gifResults = response.data;
+                console.log(gifResults)
 
-                for (var i = 0; i < gifResults; i++) {
-
-                    var gifDiv = $('<div class="gif">');
+                for (var i = 0; i < response.data.length; i++) {
+                    var gifDiv = $('<div class="gifDiv">');
                     var gifImg = $("<img>")
                     var ratingP = $("<p>")
 
                     var gifStill = gifResults[i].images.fixed_height_still.url;
                     var gifMove = gifResults[i].images.fixed_height.url;
 
+                    gifImg.attr("data-state", "still");
                     gifImg.attr("data-still", gifStill);
                     gifImg.attr("data-move", gifMove);
                     gifImg.attr("src", gifStill);
-                    gifImg.addClass("gif");
+                    gifImg.attr("class", "gif");
 
                     console.log(gifStill);
                     console.log(gifMove);
-                    ratingP.text("Rating: " + results[i].rating);
+                    ratingP.text("Rating: " + gifResults[i].rating);
 
                     gifDiv.append(ratingP);
                     gifDiv.append(gifImg);
 
                     $("#gifContainer").prepend(gifDiv);
                 }
-
+                $(".gif").click(giphyApp.gifClick);
+                $(".gif").button('toggle')
             })
         },
 
@@ -87,8 +93,8 @@ $(document).ready(function () {
             var state = $(this).attr("data-state");
 
             if (state === "still") {
-                $(this).attr("src", $(this).attr("data-animate"));
-                $(this).attr("data-state", "animate");
+                $(this).attr("src", $(this).attr("data-move"));
+                $(this).attr("data-state", "move");
             } else {
                 $(this).attr("src", $(this).attr("data-still"));
                 $(this).attr("data-state", "still");
@@ -101,9 +107,7 @@ $(document).ready(function () {
 
     giphyApp.renderBtns();
 
-    $(".searchBtn").click(giphyApp.displayGifs());
 
-    // $(".gif").on("click",
-
-})
+    // TODO: error on pushing to array. search btn click function no longer works after array push.
+    })
 
