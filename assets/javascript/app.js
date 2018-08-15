@@ -48,7 +48,7 @@ $(document).ready(function () {
         displayGifs: function () {
             var gif = $(this).attr("data-gifSearch");
             var key = "45oTHuGUHDNDSusO9xApgFlC5Ttl3yOF";
-            var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + gif + "&api_key=" + key + "&limit=10";
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + gif + "&api_key=" + key + "&limit=10";
             console.log(gif);
 
             $.ajax({
